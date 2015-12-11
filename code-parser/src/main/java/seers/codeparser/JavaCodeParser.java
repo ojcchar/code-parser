@@ -31,8 +31,10 @@ public class JavaCodeParser {
 			this.sourceFolders[i] = FilenameUtils.separatorsToSystem(baseFolder + File.separator + sourceFolders[i]);
 		}
 
-		for (int i = 0; i < classPaths.length; i++) {
-			this.classPaths[i] = FilenameUtils.separatorsToSystem(classPaths[i]);
+		if (classPaths != null) {
+			for (int i = 0; i < classPaths.length; i++) {
+				this.classPaths[i] = FilenameUtils.separatorsToSystem(classPaths[i]);
+			}
 		}
 
 	}
