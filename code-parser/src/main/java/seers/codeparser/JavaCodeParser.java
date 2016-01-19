@@ -2,6 +2,7 @@ package seers.codeparser;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
@@ -10,9 +11,12 @@ import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.CompilationUnit;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class JavaCodeParser {
 
+	private static Logger LOGGER = LoggerFactory.getLogger(JavaCodeParser.class);
 	private ASTParser parser;
 	private String[] classPaths;
 	private String[] sourceFolders;
@@ -41,17 +45,26 @@ public class JavaCodeParser {
 
 	public CompilationUnit parseFile(File file) throws IOException {
 
-		char[] fileContent = readFile(file);
-		parser.setUnitName(file.getName());
-		parser.setSource(fileContent);
-		parser.setKind(ASTParser.K_COMPILATION_UNIT);
+		try {
+			char[] fileContent = readFile(file);
+			parser.setUnitName(file.getName());
+			parser.setSource(fileContent);
+			parser.setKind(ASTParser.K_COMPILATION_UNIT);
 
-		setParserConf();
+			setParserConf();
 
-		CompilationUnit cu = (CompilationUnit) parser.createAST(null);
+			CompilationUnit cu;
+			cu = (CompilationUnit) parser.createAST(null);
 
-		return cu;
+			return cu;
 
+		} catch (IllegalStateException e) {
+			LOGGER.debug("Environment:");
+			LOGGER.debug(Arrays.toString(classPaths));
+			LOGGER.debug(Arrays.toString(sourceFolders));
+			LOGGER.debug(Arrays.toString(encodings));
+			throw e;
+		}
 	}
 
 	private char[] readFile(File file) throws IOException {
