@@ -60,9 +60,9 @@ public class JavaCodeParser {
 
 		} catch (IllegalStateException e) {
 			LOGGER.debug("Environment:");
-			LOGGER.debug(Arrays.toString(classPaths));
-			LOGGER.debug(Arrays.toString(sourceFolders));
-			LOGGER.debug(Arrays.toString(encodings));
+			LOGGER.debug("classpath=" + Arrays.toString(classPaths));
+			LOGGER.debug("src=" + Arrays.toString(sourceFolders));
+			LOGGER.debug("encod=" + Arrays.toString(encodings));
 			throw e;
 		}
 	}
