@@ -12,6 +12,8 @@ import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.eclipse.jdt.core.dom.Initializer;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * FIXME: INNER METHODS ARE TAKEN AS PART OF THE OUTTER CLASS
@@ -20,6 +22,8 @@ import org.eclipse.jdt.core.dom.TypeDeclaration;
  *
  */
 public class GeneralVisitor extends ASTVisitor {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(GeneralVisitor.class);
 
 	List<ClassData> classesInfo = new ArrayList<>();
 
@@ -53,6 +57,12 @@ public class GeneralVisitor extends ASTVisitor {
 		final ClassData clData = new ClassData();
 
 		ITypeBinding resolveBinding = node.resolveBinding();
+
+		if (resolveBinding == null) {
+			LOGGER.warn("No binding for : " + node.getName());
+			return;
+		}
+
 		String qualifiedName = resolveBinding.getQualifiedName();
 
 		node.accept(new ASTVisitor() {
